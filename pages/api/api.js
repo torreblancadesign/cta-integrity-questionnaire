@@ -9,32 +9,44 @@ const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    // Handle POST request - create new Airtable record
     try {
       const { fields } = req.body;
+
+      // Create a new Airtable record
       const createdRecord = await base(AIRTABLE_TABLE_NAME).create({
         fields: fields,
       });
+
       res.status(200).json({
         message: 'Record created successfully!',
         id: createdRecord.id,
       });
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create record', error });
+      console.error('Error creating record:', error);
+      res.status(500).json({
+        message: 'Failed to create record.',
+        error: error.toString(),
+      });
     }
   } else if (req.method === 'PATCH') {
-    // Handle PATCH request - update existing Airtable record
     try {
       const { id, fields } = req.body;
+
+      // Update the existing Airtable record
       const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, {
         fields: fields,
       });
+
       res.status(200).json({
         message: 'Record updated successfully!',
         id: updatedRecord.id,
       });
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update record', error });
+      console.error('Error updating record:', error);
+      res.status(500).json({
+        message: 'Failed to update record.',
+        error: error.toString(),
+      });
     }
   } else {
     res.setHeader('Allow', ['POST', 'PATCH']);
