@@ -125,51 +125,60 @@ const Component = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {/* Show the partner name in a banner if it's available */}
-      {partner && (
-        <div className={styles.banner}>
-          <h1>Partner: {partner.partnerName}</h1>
-          {/* Optionally, display the partner's logo */}
-          {partner.logo && <img src={partner.logo[0].url} alt={partner.partnerName} />}
-        </div>
-      )}
+    <>
+      {/* Navbar with partner name and logo */}
+      <nav className={styles.navbar}>
+        {partner && (
+          <div className={styles.navContent}>
+            <span className={styles.partnerName}>{partner.partnerName}</span>
+            {partner.logo && (
+              <img
+                src={partner.logo[0].url}
+                alt={partner.partnerName}
+                className={styles.partnerLogo}
+              />
+            )}
+          </div>
+        )}
+      </nav>
 
-      {questions.length > 0 ? (
-        <>
-          <h1 className={styles.heading}>
-            {questions[currentQuestion]?.question}
-          </h1>
-          {/* Check if there are options for the current question */}
-          {questions[currentQuestion].options.length > 0 ? (
-            <select
-              value={answers[questions[currentQuestion]?.fieldName] || ""}
-              onChange={handleOptionSelect}
-              className={styles.input}
-            >
-              <option value="">Select an option</option>
-              {questions[currentQuestion].options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              type="text"
-              value={answers[questions[currentQuestion]?.fieldName] || ""}
-              onChange={handleAnswerChange}
-              className={styles.input}
-            />
-          )}
-          <button onClick={handleNextQuestion} className={styles.button}>
-            {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
-          </button>
-        </>
-      ) : (
-        <p>Loading questions...</p>
-      )}
-    </div>
+      <div className={styles.container}>
+        {questions.length > 0 ? (
+          <>
+            <h1 className={styles.heading}>
+              {questions[currentQuestion]?.question}
+            </h1>
+            {/* Check if there are options for the current question */}
+            {questions[currentQuestion].options.length > 0 ? (
+              <select
+                value={answers[questions[currentQuestion]?.fieldName] || ""}
+                onChange={handleOptionSelect}
+                className={styles.input}
+              >
+                <option value="">Select an option</option>
+                {questions[currentQuestion].options.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={answers[questions[currentQuestion]?.fieldName] || ""}
+                onChange={handleAnswerChange}
+                className={styles.input}
+              />
+            )}
+            <button onClick={handleNextQuestion} className={styles.button}>
+              {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
+            </button>
+          </>
+        ) : (
+          <p>Loading questions...</p>
+        )}
+      </div>
+    </>
   );
 };
 
