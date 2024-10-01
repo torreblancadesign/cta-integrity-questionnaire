@@ -20,7 +20,7 @@ const handleNextQuestion = async () => {
   if (currentQuestion === 0) {
     // First question - Create new Airtable record
     try {
-      const response = await fetch('/api/api', {
+      const response = await fetch('../api/api', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const handleNextQuestion = async () => {
   } else if (recordId) {
     // For subsequent questions - Update the existing record
     try {
-      const response = await fetch('/api/api', {
+      const response = await fetch('../api/api', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
