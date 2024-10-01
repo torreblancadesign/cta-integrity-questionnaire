@@ -16,12 +16,13 @@ export default async function handler(req, res) {
         })
         .all();
 
-      // Map the records into a simpler format
+      // Map the records into a simpler format, including Options
       const questions = records.map((record) => ({
         id: record.id,
         fieldName: record.get('Field Name'),
         question: record.get('Question'),
         order: record.get('Order'),
+        options: record.get('Options') || [], // Get options or default to an empty array
       }));
 
       res.status(200).json({ questions });
