@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { fields } = req.body;
-      console.log('Fields received:', fields);  // Log the fields sent to Airtable
+      console.log('Full request body to Airtable:', req.body);  // Log full request body
+      console.log('Fields received for Airtable:', fields);  // Log fields
 
       // Create a new Airtable record
       const createdRecord = await base(AIRTABLE_TABLE_NAME).create({ fields });
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
         id: createdRecord.id,
       });
     } catch (error) {
-      console.error('Error creating record:', error);  // Log Airtable error details
+      console.error('Error creating record:', error);
       res.status(500).json({
         message: 'Failed to create record.',
         error: error.toString(),
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
   } else if (req.method === 'PATCH') {
     try {
       const { id, fields } = req.body;
-      console.log('Fields for update:', fields);  // Log the fields being updated
+      console.log('Fields for update:', fields);  // Log fields being updated
 
       // Update the existing Airtable record
       const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, { fields });
@@ -40,7 +41,7 @@ export default async function handler(req, res) {
         id: updatedRecord.id,
       });
     } catch (error) {
-      console.error('Error updating record:', error);  // Log Airtable error details
+      console.error('Error updating record:', error);
       res.status(500).json({
         message: 'Failed to update record.',
         error: error.toString(),
