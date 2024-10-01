@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../styles/style.module.css";
 
 const questions = [
-  { id: 1, question: "What is your name?", fieldName: "Name of Company" },
+  { id: 1, question: "What is your name?", fieldName: "Name" },
   { id: 2, question: "How old are you?", fieldName: "Age" },
   { id: 3, question: "What is your favorite hobby?", fieldName: "Favorite Hobby" },
   { id: 4, question: "What is your occupation?", fieldName: "Occupation" },
