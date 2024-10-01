@@ -17,6 +17,9 @@ const Component = () => {
 const handleNextQuestion = async () => {
   const currentFieldName = questions[currentQuestion].fieldName;
 
+  // Prepare the field to match Airtable's field name format
+  const fieldsToSend = { [currentFieldName]: answers[currentFieldName] };
+
   if (currentQuestion === 0) {
     // First question - Create new Airtable record
     try {
@@ -25,7 +28,7 @@ const handleNextQuestion = async () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fields: { [currentFieldName]: answers[currentFieldName] } }),
+        body: JSON.stringify({ fields: fieldsToSend }), // Send fields in the correct format
       });
 
       if (!response.ok) {
@@ -49,7 +52,7 @@ const handleNextQuestion = async () => {
         },
         body: JSON.stringify({
           id: recordId,
-          fields: { [currentFieldName]: answers[currentFieldName] },
+          fields: fieldsToSend,
         }),
       });
 
@@ -72,6 +75,7 @@ const handleNextQuestion = async () => {
     alert("Questionnaire completed!");
   }
 };
+
 
   const handleAnswerChange = (e) => {
     const currentFieldName = questions[currentQuestion].fieldName;
