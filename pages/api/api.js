@@ -1,5 +1,5 @@
 // api/api.js
-import { AirtableBase } from 'airtable';
+import { Airtable } from 'airtable';
 
 const AIRTABLE_API_KEY = 'patouN6Gr3y651ydi.3643964e3a5852adb6ad1ed36d63ec7ad9019beda6a2f20673ac4bcd021e86af'; // Replace with your actual Airtable API key
 const AIRTABLE_BASE_ID = 'app6V96kzHKfSguoS'; // Replace with your actual Airtable base ID
