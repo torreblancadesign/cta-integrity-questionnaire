@@ -6,7 +6,7 @@ const questions = [
   { id: 2, question: "How old are you?", fieldName: "Age" },
   { id: 3, question: "What is your favorite hobby?", fieldName: "Favorite Hobby" },
   { id: 4, question: "What is your occupation?", fieldName: "Occupation" },
-  // Add more questions as needed, up to 11 total
+  { id: 5, question: "Where do you work?", fieldName: "Job" }
 ];
 
 const Component = () => {
