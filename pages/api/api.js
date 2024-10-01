@@ -11,11 +11,10 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { fields } = req.body;
-      console.log('Full request body to Airtable:', req.body);  // Log full request body
-      console.log('Fields received for Airtable:', fields);  // Log fields
+      console.log('Fields received for Airtable:', fields);
 
-      // Create a new Airtable record
-      const createdRecord = await base(AIRTABLE_TABLE_NAME).create({ fields });
+      // Remove the "fields" key and pass the fields object directly
+      const createdRecord = await base(AIRTABLE_TABLE_NAME).create(fields);
 
       res.status(200).json({
         message: 'Record created successfully!',
@@ -31,10 +30,10 @@ export default async function handler(req, res) {
   } else if (req.method === 'PATCH') {
     try {
       const { id, fields } = req.body;
-      console.log('Fields for update:', fields);  // Log fields being updated
+      console.log('Fields for update:', fields);
 
-      // Update the existing Airtable record
-      const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, { fields });
+      // Remove the "fields" key and pass the fields object directly
+      const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, fields);
 
       res.status(200).json({
         message: 'Record updated successfully!',
