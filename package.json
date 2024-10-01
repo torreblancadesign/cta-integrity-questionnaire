@@ -22,7 +22,7 @@
     "axios": "^0.21.1",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "react-modal": "^3.14.3",
-    "airtable": "^0.11.5"  // Airtable package for API integration
+    "airtable": "^0.11.5"
   },
   "engines": {
     "node": "20.x"
