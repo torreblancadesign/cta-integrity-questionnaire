@@ -1,5 +1,4 @@
-/* style.module.css */
-.questionnaireContainer {
+.container {
     width: 80%;
     margin: 20px auto;
     padding: 20px;
@@ -8,24 +7,23 @@
     border-radius: 8px;
 }
 
-.questionHeader {
+h1 {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
 }
 
-.questionText {
-    font-size: 18px;
-    color: #666;
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
     margin-bottom: 20px;
 }
 
-.buttonContainer {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.nextButton {
+.button {
     padding: 10px 20px;
     font-size: 16px;
     color: #fff;
@@ -34,19 +32,12 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: block;
+    width: fit-content;
+    margin: auto;
 }
 
-.nextButton:hover {
+.button:hover {
     background-color: #0056b3;
-}
-
-.inputField {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
 }
  
