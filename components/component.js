@@ -16,19 +16,18 @@ const Component = () => {
 
 const handleNextQuestion = async () => {
   const currentFieldName = questions[currentQuestion].fieldName;
-
-  // Prepare the field to match Airtable's field name format
   const fieldsToSend = { [currentFieldName]: answers[currentFieldName] };
 
+  console.log('Fields to be sent:', fieldsToSend);  // Log fields before sending
+
   if (currentQuestion === 0) {
-    // First question - Create new Airtable record
     try {
       const response = await fetch('/api/api', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fields: fieldsToSend }), // Send fields in the correct format
+        body: JSON.stringify({ fields: fieldsToSend }),  // Send fields in the correct format
       });
 
       if (!response.ok) {
@@ -36,14 +35,13 @@ const handleNextQuestion = async () => {
       }
 
       const data = await response.json();
-      setRecordId(data.id); // Store the record ID for future updates
+      setRecordId(data.id);  // Store the record ID for future updates
     } catch (error) {
       console.error('Error creating record:', error);
       alert("Failed to submit answers!");
       return;
     }
   } else if (recordId) {
-    // For subsequent questions - Update the existing record
     try {
       const response = await fetch('/api/api', {
         method: 'PATCH',
