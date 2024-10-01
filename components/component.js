@@ -92,6 +92,14 @@ const Component = () => {
     });
   };
 
+  const handleOptionSelect = (e) => {
+    const currentFieldName = questions[currentQuestion]?.fieldName;
+    setAnswers({
+      ...answers,
+      [currentFieldName]: e.target.value,
+    });
+  };
+
   return (
     <div className={styles.container}>
       {questions.length > 0 ? (
@@ -99,12 +107,30 @@ const Component = () => {
           <h1 className={styles.heading}>
             {questions[currentQuestion]?.question}
           </h1>
-          <input
-            type="text"
-            value={answers[questions[currentQuestion]?.fieldName] || ""}
-            onChange={handleAnswerChange}
-            className={styles.input}
-          />
+          {/* Check if there are options for the current question */}
+          {questions[currentQuestion].options.length > 0 ? (
+            // Render a dropdown or radio buttons for multiple-choice questions
+            <select
+              value={answers[questions[currentQuestion]?.fieldName] || ""}
+              onChange={handleOptionSelect}
+              className={styles.input}
+            >
+              <option value="">Select an option</option>
+              {questions[currentQuestion].options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          ) : (
+            // Render a regular text input for questions without options
+            <input
+              type="text"
+              value={answers[questions[currentQuestion]?.fieldName] || ""}
+              onChange={handleAnswerChange}
+              className={styles.input}
+            />
+          )}
           <button onClick={handleNextQuestion} className={styles.button}>
             {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
           </button>
