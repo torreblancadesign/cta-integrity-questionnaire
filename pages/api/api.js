@@ -10,12 +10,10 @@ const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { fields } = req.body;
+      const { fields } = req.body; // Expecting a 'fields' object with field names
 
       // Create a new Airtable record
-      const createdRecord = await base(AIRTABLE_TABLE_NAME).create({
-        fields: fields,
-      });
+      const createdRecord = await base(AIRTABLE_TABLE_NAME).create({ fields });
 
       res.status(200).json({
         message: 'Record created successfully!',
@@ -30,12 +28,10 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'PATCH') {
     try {
-      const { id, fields } = req.body;
+      const { id, fields } = req.body; // Expecting 'id' and 'fields' in the body
 
       // Update the existing Airtable record
-      const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, {
-        fields: fields,
-      });
+      const updatedRecord = await base(AIRTABLE_TABLE_NAME).update(id, { fields });
 
       res.status(200).json({
         message: 'Record updated successfully!',
