@@ -20,7 +20,6 @@ export default async function handler(req, res) {
         id: createdRecord.id,
       });
     } catch (error) {
-      console.error('Error creating record:', error);
       res.status(500).json({ message: 'Failed to create record', error });
     }
   } else if (req.method === 'PATCH') {
@@ -35,7 +34,6 @@ export default async function handler(req, res) {
         id: updatedRecord.id,
       });
     } catch (error) {
-      console.error('Error updating record:', error);
       res.status(500).json({ message: 'Failed to update record', error });
     }
   } else {
