@@ -1,11 +1,35 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/router'; // Import useRouter to access URL parameters
 import styles from "../styles/style.module.css";
 
 const Component = () => {
+  const router = useRouter();
+  const { id } = router.query; // Get the "id" from the URL
+  const [partner, setPartner] = useState(null); // Store the partner information
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]); // Store the fetched questions
   const [recordId, setRecordId] = useState(null); // Track the Airtable record ID
+
+  // Fetch the partner info when the "id" is available
+  useEffect(() => {
+    if (!id) return; // Don't fetch if the id is not available
+
+    const fetchPartner = async () => {
+      try {
+        const response = await fetch(`/api/get-partner?id=${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch partner");
+        }
+        const data = await response.json();
+        setPartner(data);
+      } catch (error) {
+        console.error("Error fetching partner:", error);
+      }
+    };
+
+    fetchPartner();
+  }, [id]); // Run this effect when the "id" changes
 
   // Fetch the questions from the Airtable API on component mount
   useEffect(() => {
@@ -102,6 +126,15 @@ const Component = () => {
 
   return (
     <div className={styles.container}>
+      {/* Show the partner name in a banner if it's available */}
+      {partner && (
+        <div className={styles.banner}>
+          <h1>Partner: {partner.partnerName}</h1>
+          {/* Optionally, display the partner's logo */}
+          {partner.logo && <img src={partner.logo[0].url} alt={partner.partnerName} />}
+        </div>
+      )}
+
       {questions.length > 0 ? (
         <>
           <h1 className={styles.heading}>
@@ -109,7 +142,6 @@ const Component = () => {
           </h1>
           {/* Check if there are options for the current question */}
           {questions[currentQuestion].options.length > 0 ? (
-            // Render a dropdown or radio buttons for multiple-choice questions
             <select
               value={answers[questions[currentQuestion]?.fieldName] || ""}
               onChange={handleOptionSelect}
@@ -123,7 +155,6 @@ const Component = () => {
               ))}
             </select>
           ) : (
-            // Render a regular text input for questions without options
             <input
               type="text"
               value={answers[questions[currentQuestion]?.fieldName] || ""}
