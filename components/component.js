@@ -14,53 +14,64 @@ const Component = () => {
   const [answers, setAnswers] = useState({});
   const [recordId, setRecordId] = useState(null); // Track Airtable record ID
 
-  const handleNextQuestion = async () => {
-    const currentFieldName = questions[currentQuestion].fieldName;
+const handleNextQuestion = async () => {
+  const currentFieldName = questions[currentQuestion].fieldName;
 
-    if (currentQuestion === 0) {
-      // Create Airtable record on the first question
-      try {
-        const response = await fetch('/api/api', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fields: { [currentFieldName]: answers[currentFieldName] } }),
-        });
+  if (currentQuestion === 0) {
+    // First question - Create new Airtable record
+    try {
+      const response = await fetch('/api/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fields: { [currentFieldName]: answers[currentFieldName] } }),
+      });
 
-        const data = await response.json();
-        setRecordId(data.id); // Store Airtable record ID for future updates
-      } catch (error) {
-        console.error('Error creating record:', error);
-        alert("Failed to submit answers!");
-        return;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } else if (recordId) {
-      // Update Airtable record for subsequent questions
-      try {
-        await fetch('/api/api', {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id: recordId,
-            fields: { [currentFieldName]: answers[currentFieldName] },
-          }),
-        });
-      } catch (error) {
-        console.error('Error updating record:', error);
-        alert("Failed to update answers!");
-        return;
-      }
-    }
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      alert("Questionnaire completed!");
+      const data = await response.json();
+      setRecordId(data.id); // Store the record ID for future updates
+    } catch (error) {
+      console.error('Error creating record:', error);
+      alert("Failed to submit answers!");
+      return;
     }
-  };
+  } else if (recordId) {
+    // For subsequent questions - Update the existing record
+    try {
+      const response = await fetch('/api/api', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: recordId,
+          fields: { [currentFieldName]: answers[currentFieldName] },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error updating record:', error);
+      alert("Failed to update answers!");
+      return;
+    }
+  }
+
+  if (currentQuestion < questions.length - 1) {
+    setCurrentQuestion(currentQuestion + 1);
+  } else {
+    alert("Questionnaire completed!");
+  }
+};
 
   const handleAnswerChange = (e) => {
     const currentFieldName = questions[currentQuestion].fieldName;
