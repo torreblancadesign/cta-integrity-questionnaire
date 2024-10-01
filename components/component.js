@@ -5,6 +5,7 @@ const Component = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]); // Store the fetched questions
+  const [recordId, setRecordId] = useState(null); // Track the Airtable record ID
 
   // Fetch the questions from the Airtable API on component mount
   useEffect(() => {
