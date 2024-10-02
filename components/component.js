@@ -56,7 +56,7 @@ const Component = () => {
       // First question - Create new Airtable record, include the "Partners" field
       const fieldsWithPartner = {
         ...fieldsToSend,
-        Partners: id // Add the partner id from the GET variable to the "Partners" field
+        Partners: [{ id: id }] // Link the partner record using the "id"
       };
 
       try {
