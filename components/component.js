@@ -10,6 +10,7 @@ const Component = () => {
   const [answers, setAnswers] = useState({});
   const [questions, setQuestions] = useState([]); // Store the fetched questions
   const [recordId, setRecordId] = useState(null); // Track the Airtable record ID
+  const [results, setResults] = useState(null); // Store the results (end screen content)
 
   // Fetch the partner info when the "id" is available
   useEffect(() => {
@@ -53,10 +54,10 @@ const Component = () => {
     const fieldsToSend = { [currentFieldName]: answers[currentFieldName] };
 
     if (currentQuestion === 0) {
-      // First question - Create new Airtable record, include the "Partners" field
+      // First question - Create new Airtable record, include the "Partners" field with linked record
       const fieldsWithPartner = {
         ...fieldsToSend,
-        Partners: [id] // Link the partner record using the "id"
+        Partners: [id] // Link the partner record using the raw id from the URL
       };
 
       try {
@@ -104,12 +105,29 @@ const Component = () => {
         alert("Failed to update answers!");
         return;
       }
+
+      // Check the "Logic" field from Airtable to determine the next action
+      try {
+        const logicResponse = await fetch(`/api/get-logic?id=${recordId}`);
+        const logicData = await logicResponse.json();
+        const logicValue = logicData.logic; // Get the "Logic" field value
+
+        if (logicValue === "Not Required to File") {
+          // End the questionnaire if the "Logic" field says "Not Required to File"
+          setResults("Results: Not Required to File");
+          return;
+        }
+      } catch (error) {
+        console.error('Error fetching logic:', error);
+      }
     }
 
+    // If we have more questions, move to the next one
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      alert("Questionnaire completed!");
+      // If we finish the whole questionnaire with "Required to File"
+      setResults("Results: Required to File");
     }
   };
 
@@ -128,6 +146,15 @@ const Component = () => {
       [currentFieldName]: e.target.value,
     });
   };
+
+  if (results) {
+    // If the results are set, show the end screen
+    return (
+      <div className={styles.container}>
+        <h1>{results}</h1>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -188,5 +215,4 @@ const Component = () => {
 };
 
 export default Component;
-
  
