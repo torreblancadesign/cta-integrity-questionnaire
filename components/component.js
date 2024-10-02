@@ -147,18 +147,9 @@ const Component = () => {
     });
   };
 
-  if (results) {
-    // If the results are set, show the end screen
-    return (
-      <div className={styles.container}>
-        <h1>{results}</h1>
-      </div>
-    );
-  }
-
   return (
     <>
-      {/* Navbar with partner name and logo */}
+      {/* Always render the navbar */}
       <nav className={styles.navbar}>
         {partner && (
           <div className={styles.navContent}>
@@ -175,7 +166,10 @@ const Component = () => {
       </nav>
 
       <div className={styles.container}>
-        {questions.length > 0 ? (
+        {/* Show results screen if results are set, otherwise show the questionnaire */}
+        {results ? (
+          <h1>{results}</h1>
+        ) : (
           <>
             <h1 className={styles.heading}>
               {questions[currentQuestion]?.question}
@@ -206,8 +200,6 @@ const Component = () => {
               {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
             </button>
           </>
-        ) : (
-          <p>Loading questions...</p>
         )}
       </div>
     </>
