@@ -50,7 +50,7 @@ const Component = () => {
   const handleNextQuestion = async () => {
     if (questions.length === 0) return; // Handle the case when questions are not yet loaded
 
-    const currentFieldName = questions[currentQuestion].fieldName;
+    const currentFieldName = questions[currentQuestion]?.fieldName;
     const fieldsToSend = { [currentFieldName]: answers[currentFieldName] };
 
     if (currentQuestion === 0) {
@@ -147,16 +147,7 @@ const Component = () => {
     });
   };
 
-  if (results) {
-    // If the results are set, show the end screen
-    return (
-      <div className={styles.container}>
-        <h1>{results}</h1>
-      </div>
-    );
-  }
-
-return (
+  return (
     <>
       {/* Always render the navbar */}
       <nav className={styles.navbar}>
@@ -179,36 +170,40 @@ return (
         {results ? (
           <h1>{results}</h1>
         ) : (
-          <>
-            <h1 className={styles.heading}>
-              {questions[currentQuestion]?.question}
-            </h1>
-            {/* Check if there are options for the current question */}
-            {questions[currentQuestion].options.length > 0 ? (
-              <select
-                value={answers[questions[currentQuestion]?.fieldName] || ""}
-                onChange={handleOptionSelect}
-                className={styles.input}
-              >
-                <option value="">Select an option</option>
-                {questions[currentQuestion].options.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type="text"
-                value={answers[questions[currentQuestion]?.fieldName] || ""}
-                onChange={handleAnswerChange}
-                className={styles.input}
-              />
-            )}
-            <button onClick={handleNextQuestion} className={styles.button}>
-              {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
-            </button>
-          </>
+          questions.length > 0 && questions[currentQuestion] ? ( // Add check for questions[currentQuestion]
+            <>
+              <h1 className={styles.heading}>
+                {questions[currentQuestion]?.question}
+              </h1>
+              {/* Check if there are options for the current question */}
+              {questions[currentQuestion].options?.length > 0 ? ( // Add check for options field
+                <select
+                  value={answers[questions[currentQuestion]?.fieldName] || ""}
+                  onChange={handleOptionSelect}
+                  className={styles.input}
+                >
+                  <option value="">Select an option</option>
+                  {questions[currentQuestion].options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={answers[questions[currentQuestion]?.fieldName] || ""}
+                  onChange={handleAnswerChange}
+                  className={styles.input}
+                />
+              )}
+              <button onClick={handleNextQuestion} className={styles.button}>
+                {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
+              </button>
+            </>
+          ) : (
+            <p>Loading questions...</p>
+          )
         )}
       </div>
     </>
