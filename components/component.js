@@ -53,14 +53,19 @@ const Component = () => {
     const fieldsToSend = { [currentFieldName]: answers[currentFieldName] };
 
     if (currentQuestion === 0) {
-      // First question - Create new Airtable record
+      // First question - Create new Airtable record, include the "Partners" field
+      const fieldsWithPartner = {
+        ...fieldsToSend,
+        Partners: id // Add the partner id from the GET variable to the "Partners" field
+      };
+
       try {
         const response = await fetch('/api/api', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ fields: fieldsToSend }),
+          body: JSON.stringify({ fields: fieldsWithPartner }),
         });
 
         if (!response.ok) {
@@ -183,4 +188,5 @@ const Component = () => {
 };
 
 export default Component;
+
  
