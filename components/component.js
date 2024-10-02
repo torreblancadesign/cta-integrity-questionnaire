@@ -130,7 +130,6 @@ const Component = () => {
       <nav className={styles.navbar}>
         {partner && (
           <div className={styles.navContent}>
-            <span className={styles.partnerName}>{partner.partnerName}</span>
             {partner.logo && (
               <img
                 src={partner.logo[0].url}
@@ -138,6 +137,7 @@ const Component = () => {
                 className={styles.partnerLogo}
               />
             )}
+            <span className={styles.partnerName}>{partner.partnerName}</span>
           </div>
         )}
       </nav>
