@@ -13,16 +13,18 @@ export default async function handler(req, res) {
       const records = await base(AIRTABLE_TABLE_NAME)
         .select({
           sort: [{ field: 'Order', direction: 'asc' }], // Sort by "Order"
+          fields: ['Field Name', 'Question', 'Order', 'Options', 'Description'] // Add 'Description' field
         })
         .all();
 
-      // Map the records into a simpler format, including Options
+      // Map the records into a simpler format, including Options and Description
       const questions = records.map((record) => ({
         id: record.id,
         fieldName: record.get('Field Name'),
         question: record.get('Question'),
         order: record.get('Order'),
         options: record.get('Options') || [], // Get options or default to an empty array
+        description: record.get('Description') || '' // Get description or default to an empty string
       }));
 
       res.status(200).json({ questions });
