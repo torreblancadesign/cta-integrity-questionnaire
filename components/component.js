@@ -38,6 +38,7 @@ const Component = () => {
       try {
         const response = await fetch('/api/get-questions');
         const data = await response.json();
+        // We expect "Description" to be part of the fetched data
         setQuestions(data.questions);
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -170,13 +171,21 @@ const Component = () => {
         {results ? (
           <h1>{results}</h1>
         ) : (
-          questions.length > 0 && questions[currentQuestion] ? ( // Add check for questions[currentQuestion]
+          questions.length > 0 && questions[currentQuestion] ? (
             <>
               <h1 className={styles.heading}>
                 {questions[currentQuestion]?.question}
               </h1>
+
+              {/* Render description if available */}
+              {questions[currentQuestion]?.description && (
+                <p className={styles.description}>
+                  {questions[currentQuestion].description}
+                </p>
+              )}
+
               {/* Check if there are options for the current question */}
-              {questions[currentQuestion].options?.length > 0 ? ( // Add check for options field
+              {questions[currentQuestion].options?.length > 0 ? (
                 <select
                   value={answers[questions[currentQuestion]?.fieldName] || ""}
                   onChange={handleOptionSelect}
