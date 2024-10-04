@@ -11,6 +11,7 @@ const Component = () => {
   const [questions, setQuestions] = useState([]); // Store the fetched questions
   const [recordId, setRecordId] = useState(null); // Track the Airtable record ID
   const [results, setResults] = useState(null); // Store the results (end screen content)
+  const [resultsPage, setResultsPage] = useState(null); // Store the fetched results page content
 
   // Fetch the partner info when the "id" is available
   useEffect(() => {
@@ -38,7 +39,6 @@ const Component = () => {
       try {
         const response = await fetch('/api/get-questions');
         const data = await response.json();
-        // We expect "Description" to be part of the fetched data
         setQuestions(data.questions);
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -47,6 +47,17 @@ const Component = () => {
 
     fetchQuestions();
   }, []);
+
+  // Fetch the results page content dynamically
+  const fetchResultsPage = async (pageName) => {
+    try {
+      const response = await fetch(`/api/get-results-page?pageName=${pageName}`);
+      const data = await response.json();
+      setResultsPage(data);
+    } catch (error) {
+      console.error("Error fetching results page:", error);
+    }
+  };
 
   const handleNextQuestion = async () => {
     if (questions.length === 0) return; // Handle the case when questions are not yet loaded
@@ -114,8 +125,9 @@ const Component = () => {
         const logicValue = logicData.logic; // Get the "Logic" field value
 
         if (logicValue === "Not Required to File") {
-          // End the questionnaire if the "Logic" field says "Not Required to File"
-          setResults("Results: Not Required to File");
+          // Fetch content for the "Not Required to File" results page
+          fetchResultsPage("Not Required to File");
+          setResults("Not Required to File");
           return;
         }
       } catch (error) {
@@ -127,8 +139,9 @@ const Component = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // If we finish the whole questionnaire with "Required to File"
-      setResults("Results: Required to File");
+      // Fetch content for the "Required to File" results page
+      fetchResultsPage("Required to File");
+      setResults("Required to File");
     }
   };
 
@@ -167,9 +180,17 @@ const Component = () => {
       </nav>
 
       <div className={styles.container}>
-        {/* Show results screen if results are set, otherwise show the questionnaire */}
-        {results ? (
-          <h1>{results}</h1>
+        {/* Show results page if results are set */}
+        {resultsPage ? (
+          <>
+            <h1>{results}</h1>
+            <p>{resultsPage.resultsText}</p>
+            {resultsPage.buttonName && resultsPage.buttonLink && (
+              <a href={resultsPage.buttonLink} className={styles.button}>
+                {resultsPage.buttonName}
+              </a>
+            )}
+          </>
         ) : (
           questions.length > 0 && questions[currentQuestion] ? (
             <>
