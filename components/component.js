@@ -12,6 +12,8 @@ const Component = () => {
   const [recordId, setRecordId] = useState(null); // Track the Airtable record ID
   const [results, setResults] = useState(null); // Store the results (end screen content)
   const [resultsPage, setResultsPage] = useState(null); // Store the fetched results page content
+  const [showInitialPage, setShowInitialPage] = useState(true); // Show the initial page before the questionnaire
+  const [initialPageText, setInitialPageText] = useState(""); // Store initial page text
 
   // Fetch the partner info when the "id" is available
   useEffect(() => {
@@ -32,6 +34,21 @@ const Component = () => {
 
     fetchPartner();
   }, [id]); // Run this effect when the "id" changes
+
+  // Fetch the initial page text from Airtable
+  useEffect(() => {
+    const fetchInitialPage = async () => {
+      try {
+        const response = await fetch(`/api/get-results-page?pageName=Initial Page`);
+        const data = await response.json();
+        setInitialPageText(data.resultsText);
+      } catch (error) {
+        console.error("Error fetching initial page:", error);
+      }
+    };
+
+    fetchInitialPage();
+  }, []);
 
   // Fetch the questions from the Airtable API on component mount
   useEffect(() => {
@@ -161,6 +178,11 @@ const Component = () => {
     });
   };
 
+  // Function to start the questionnaire and hide the initial page
+  const startQuestionnaire = () => {
+    setShowInitialPage(false);
+  };
+
   return (
     <>
       {/* Always render the navbar */}
@@ -180,8 +202,24 @@ const Component = () => {
       </nav>
 
       <div className={styles.container}>
-        {/* Show results page if results are set */}
-        {resultsPage ? (
+        {/* Show the initial page if set */}
+        {showInitialPage ? (
+          <>
+            <div className={styles.initialPage}>
+              {partner && (
+                <img
+                  src={partner.logo[0].url}
+                  alt={partner.partnerName}
+                  className={styles.initialLogo}
+                />
+              )}
+              <p>{initialPageText}</p>
+              <button onClick={startQuestionnaire} className={styles.button}>
+                Start
+              </button>
+            </div>
+          </>
+        ) : resultsPage ? (
           <>
             <h1>{results}</h1>
             <p>{resultsPage.resultsText}</p>
