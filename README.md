@@ -1,7 +1,7 @@
 
 # CTA Integrity Questionnaire
 
-This repository hosts the code for the CTA Integrity Questionnaire, a web-based application designed to collect and process questionnaire responses for integrity assessment. The application integrates with Airtable to manage the questionnaire logic and data.
+This repository hosts the code for the CTA Integrity Questionnaire, a web-based application designed to collect and process questionnaire responses. The application integrates with Airtable to manage the questionnaire logic and data.
 
 ## Table of Contents
 
