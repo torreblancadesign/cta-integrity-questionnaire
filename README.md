@@ -86,10 +86,3 @@ Ensure that you have the appropriate table structure in Airtable to match the ap
 
 2. **Logic-Based Progression**: After answering the first question, the system checks the `Logic` field in Airtable for each subsequent question. Depending on the value (`Required to File` or `Not Required to File`), the questionnaire either continues or ends.
 
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request if you find bugs or want to suggest features.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
